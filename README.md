@@ -1,6 +1,13 @@
 # 合同审查工作台
 
 给企业法务和业务负责人用的 AI 合同审查工具。上传或粘贴一份合同，系统会调用扣子工作流把它过一遍：标出有风险的条款并给出可直接落地的修改建议，核验文中引用的法律是否还现行有效，核实合作方企业的工商信息，最后整理成一份飞书报告。你不用逐条抠字眼，先让它扫一遍，再带着重点去细看。
+<img width="1723" height="916" alt="屏幕截图 2026-09-17 012300" src="https://github.com/user-attachments/assets/76a688da-27ef-4c32-96f2-483b943d33e1" /><img width="1662" height="924" alt="屏幕截图 2026-09-17 012322" src="https://github.com/user-attachments/assets/1f24b122-72a8-4cac-8121-a435dc995734" /><img width="1700" height="917" alt="屏幕截图 2026-09-17 012348" src="https://github.com/user-attachments/assets/5fc6bae0-478a-437c-b28e-7332430ef62d" /><img width="1695" height="915" alt="屏幕截图 2026-09-17 012405" src="https://github.com/user-attachments/assets/24aaaf9d-e971-4146-b493-169ceb27aaa7" />![Uploading 屏幕截图 2026-09-17 012432.png…]()
+
+
+
+
+
+
 
 ## 它能做什么
 
