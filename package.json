@@ -1,0 +1,16 @@
+{
+  "name": "contract-review-workbench",
+  "version": "1.0.0",
+  "private": true,
+  "description": "合同审查工作台 —— AI 合同风险识别（扣子工作流）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "docx": "^9.7.1",
+    "express": "^4.19.2",
+    "mammoth": "^1.8.0",
+    "pdf-parse": "^1.1.1"
+  }
+}

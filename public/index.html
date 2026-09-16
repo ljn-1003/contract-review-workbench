@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>合同审查工作台</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+
+    <!-- 顶部区域 -->
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-name">合同审查工作台</span>
+        </div>
+        <div class="status-badge" id="cozeStatus">
+          <span class="status-dot"></span>
+          <span class="status-text">检测连接状态…</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="container">
+
+      <!-- 首屏区域 -->
+      <section class="hero">
+        <h1 class="hero-title">AI 合同风险识别</h1>
+        <p class="hero-subtitle">上传合同，快速获得清晰可执行的审查意见</p>
+        <p class="hero-desc">
+          系统可自动提取合同内容、识别条款风险、检查法律引用，并生成可落地的修改建议。
+        </p>
+        <ol class="steps" id="stepsOverview">
+          <li class="step"><span class="step-num">1</span><span class="step-label">提取合同内容</span></li>
+          <li class="step"><span class="step-num">2</span><span class="step-label">查询企业信息</span></li>
+          <li class="step"><span class="step-num">3</span><span class="step-label">审查合同条款</span></li>
+          <li class="step"><span class="step-num">4</span><span class="step-label">生成审查报告</span></li>
+        </ol>
+      </section>
+
+      <!-- 合同提交区域 -->
+      <section class="card form-card" id="formCard">
+        <div class="card-head">
+          <h2 class="card-title">提交合同</h2>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label class="label" for="contractType">合同类型</label>
+            <select id="contractType" class="input">
+              <option value="采购合同">采购合同</option>
+              <option value="销售合同">销售合同</option>
+              <option value="服务合同">服务合同</option>
+              <option value="劳动合同">劳动合同</option>
+              <option value="保密协议">保密协议</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label class="label">审查立场</label>
+            <div class="seg" id="stance">
+              <button type="button" class="seg-btn is-active" data-value="甲方">甲方</button>
+              <button type="button" class="seg-btn" data-value="乙方">乙方</button>
+              <button type="button" class="seg-btn" data-value="中立">中立</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">重点审查内容 <span class="label-hint">（可多选）</span></label>
+          <div class="chips" id="focusAreas">
+            <button type="button" class="chip" data-value="付款与结算">付款与结算</button>
+            <button type="button" class="chip" data-value="违约责任">违约责任</button>
+            <button type="button" class="chip" data-value="知识产权">知识产权</button>
+            <button type="button" class="chip" data-value="交付验收">交付验收</button>
+            <button type="button" class="chip" data-value="解除终止">解除终止</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label" for="additionalRequirements">补充审查要求 <span class="label-hint">（选填）</span></label>
+          <textarea id="additionalRequirements" class="input textarea-sm" rows="2"
+            placeholder="例如：重点检查付款方式、保密条款的合理性…"></textarea>
+        </div>
+
+        <!-- 上传区域 -->
+        <div class="field">
+          <label class="label">上传合同文件</label>
+          <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="上传合同文件">
+            <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt,.md" hidden />
+            <div class="dz-icon" aria-hidden="true"></div>
+            <p class="dz-main">点击上传，或将文件拖拽到此处</p>
+            <p class="dz-hint">支持 PDF、Word、TXT、MD 文件，单个文件不超过 10MB</p>
+          </div>
+          <div class="file-chip" id="fileChip" hidden>
+            <span class="file-name" id="fileName"></span>
+            <span class="file-size" id="fileSize"></span>
+            <button type="button" class="file-remove" id="fileRemove" aria-label="移除文件">移除</button>
+          </div>
+          <p class="field-error" id="fileError" hidden></p>
+        </div>
+
+        <!-- 粘贴文本 -->
+        <div class="field">
+          <label class="label" for="contractText">或直接粘贴合同文本 <span class="label-hint">（与上传二选一，粘贴优先）</span></label>
+          <textarea id="contractText" class="input textarea" rows="7"
+            placeholder="将合同正文粘贴到此处…"></textarea>
+        </div>
+
+        <p class="form-error" id="formError" hidden></p>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-primary" id="submitBtn">开始智能审查</button>
+          <button type="button" class="btn btn-ghost" id="resetBtn">重置</button>
+        </div>
+      </section>
+
+      <!-- 审查过程 -->
+      <section class="card process-card" id="processCard" hidden>
+        <div class="process-head">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="process-title">正在审查合同…</span>
+        </div>
+        <ol class="steps process-steps" id="processSteps">
+          <li class="step" data-step="1"><span class="step-num">1</span><span class="step-label">提取合同内容</span></li>
+          <li class="step" data-step="2"><span class="step-num">2</span><span class="step-label">查询企业信息</span></li>
+          <li class="step" data-step="3"><span class="step-num">3</span><span class="step-label">审查合同条款</span></li>
+          <li class="step" data-step="4"><span class="step-num">4</span><span class="step-label">生成审查报告</span></li>
+        </ol>
+        <p class="process-status" id="processStatus">正在提取文本并逐项分析合同条款，请稍候…</p>
+      </section>
+
+      <!-- 审查结果 -->
+      <section class="card result-card" id="resultCard" hidden>
+        <div class="result-banner" id="resultBanner">
+          <span class="result-banner-icon" aria-hidden="true"></span>
+          <div>
+            <div class="result-banner-title" id="resultTitle">审查完成</div>
+            <div class="result-banner-sub" id="resultSub"></div>
+          </div>
+        </div>
+
+        <div class="demo-banner" id="demoBanner" hidden>
+          当前为演示结果：未成功连接扣子工作流，以下内容为本地模拟数据，仅供演示。
+        </div>
+
+        <div class="error-banner" id="errorBanner" hidden>
+          <div class="error-text" id="errorText"></div>
+          <div class="error-actions">
+            <button type="button" class="btn btn-primary" id="retryBtn">重试</button>
+            <button type="button" class="btn btn-ghost" id="useDemoBtn">使用演示结果</button>
+          </div>
+        </div>
+
+        <!-- 摘要 -->
+        <div class="summary-grid" id="summaryGrid">
+          <div class="summary-box">
+            <div class="summary-label">审查意见</div>
+            <div class="summary-value" id="summaryOpinions">—</div>
+          </div>
+          <div class="summary-box">
+            <div class="summary-label">法律引用核验</div>
+            <div class="summary-value" id="summaryLaw">—</div>
+          </div>
+          <div class="summary-box">
+            <div class="summary-label">企业信息核验</div>
+            <div class="summary-value" id="summaryEnterprise">—</div>
+          </div>
+        </div>
+
+        <!-- 核验摘要详情 -->
+        <div class="check-grid" id="checkGrid"></div>
+
+        <!-- 筛选 -->
+        <div class="filter-bar" id="filterBar">
+          <div class="filter-tabs" id="filterTabs">
+            <button type="button" class="filter-tab is-active" data-filter="all">全部<span class="count"></span></button>
+            <button type="button" class="filter-tab" data-filter="high">高风险<span class="count"></span></button>
+            <button type="button" class="filter-tab" data-filter="medium">中风险<span class="count"></span></button>
+            <button type="button" class="filter-tab" data-filter="low">低风险<span class="count"></span></button>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" id="copyAllBtn">一键复制全部意见</button>
+        </div>
+
+        <!-- 意见卡片列表 -->
+        <div class="opinion-list" id="opinionList"></div>
+
+        <!-- 飞书报告 -->
+        <div class="feishu-box" id="feishuBox" hidden>
+          <a class="btn btn-primary" id="feishuBtn" href="#" target="_blank" rel="noopener">查看飞书完整审查报告</a>
+          <span class="feishu-note" id="feishuNote"></span>
+        </div>
+      </section>
+
+      <!-- 历史记录 -->
+      <section class="card history-card" id="historyCard" hidden>
+        <div class="card-head">
+          <h2 class="card-title">历史记录</h2>
+          <button type="button" class="btn btn-ghost btn-sm" id="clearHistoryBtn">清空记录</button>
+        </div>
+        <ul class="history-list" id="historyList"></ul>
+      </section>
+
+      <footer class="footer">
+        <p>合同审查工作台 · 由扣子工作流提供 AI 能力 · 审查结果仅供参考，不构成正式法律意见</p>
+      </footer>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
